@@ -5,13 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 
 class FirstFragment : Fragment() {
 
     private var generateButton: Button? = null
     private var previousResult: TextView? = null
+    private var minEdit: EditText? = null
+    private var maxEdit: EditText? = null
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,11 +35,16 @@ class FirstFragment : Fragment() {
 
         val result = arguments?.getInt(PREVIOUS_RESULT_KEY)
         previousResult?.text = "Previous result: ${result.toString()}"
-
         // TODO: val min = ...
+        minEdit = view.findViewById(R.id.min_value)
         // TODO: val max = ...
+        maxEdit =  view.findViewById(R.id.max_value)
 
         generateButton?.setOnClickListener {
+            val min:Int = minEdit?.text.toString().toIntOrNull()?:0
+            val max:Int = maxEdit?.text.toString().toIntOrNull()?:0
+            (activity as Exchange)?.secondFragmentOpenEx(min, max)
+
             // TODO: send min and max to the SecondFragment
         }
     }
@@ -47,6 +59,7 @@ class FirstFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+
 
         private const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
     }
