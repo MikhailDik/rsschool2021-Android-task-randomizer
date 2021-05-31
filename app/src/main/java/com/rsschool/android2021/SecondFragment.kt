@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.lang.Exception
 
 class SecondFragment : Fragment() {
 
     private var backButton: Button? = null
-    private var result: TextView? = null
+    var result: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,10 +31,15 @@ class SecondFragment : Fragment() {
         val min = arguments?.getInt(MIN_VALUE_KEY) ?: 0
         val max = arguments?.getInt(MAX_VALUE_KEY) ?: 0
 
-        result?.text = if ( min <= max) generate(min, max).toString() else generate(max, min).toString()
+        result?.text = generate(min, max).toString()
 
         backButton?.setOnClickListener {
-            (activity as Exchange)?.firstFragmentOpenEx(result?.text.toString().toIntOrNull()?:0)
+            try {
+                (activity as Exchange)?.firstFragmentOpenEx(result?.text.toString().toInt())
+            }
+            catch (e: NumberFormatException) {
+                Toast.makeText(this.context,"Error!",Toast.LENGTH_SHORT).show()
+            }
         // TODO: implement back
 
         }
@@ -40,8 +47,14 @@ class SecondFragment : Fragment() {
 
     private fun generate(min: Int, max: Int): Int {
         // TODO: generate random number
-        return (min..max).random()
+            return (min..max).random()
         //return 0
+    }
+
+    public fun getResult() : Int {
+
+        return try {result?.text.toString().toInt()}   catch(e:Exception) {0}
+
     }
 
     companion object {

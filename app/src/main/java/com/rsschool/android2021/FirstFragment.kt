@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 
@@ -41,9 +42,18 @@ class FirstFragment : Fragment() {
         maxEdit =  view.findViewById(R.id.max_value)
 
         generateButton?.setOnClickListener {
-            val min:Int = minEdit?.text.toString().toIntOrNull()?:0
-            val max:Int = maxEdit?.text.toString().toIntOrNull()?:0
-            (activity as Exchange)?.secondFragmentOpenEx(min, max)
+            try {
+                val min:Int = minEdit?.text.toString().toInt()
+                val max:Int = maxEdit?.text.toString().toInt()
+                if ((min <= max) && min >= 0 && max >= 0) {
+                        (activity as Exchange)?.secondFragmentOpenEx(min, max) }
+                else {
+                    Toast.makeText(this.context,"Enter correct value!",Toast.LENGTH_SHORT).show()
+                }
+            }
+            catch (e:Exception){
+                Toast.makeText(this.context,"Enter correct value!",Toast.LENGTH_SHORT).show()
+            }
 
             // TODO: send min and max to the SecondFragment
         }
